@@ -6,7 +6,7 @@ import { ref } from 'vue'
 
 const imageUrl = ref('')
 const showLoading = ref(false);
-
+const outputtext=ref('')
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -65,10 +65,12 @@ const prediction = async () => {
         if (Array.isArray(response.output)) {
           url = response.output && response.output.length && response.output[0]
         }
+        
         if (typeof url == 'object' || typeof url == 'Object') {
           return
         }
         imageUrl.value = url
+        outputtext.value= url
     }
   } catch (error) {
     console.log("prediction error = ",error)
@@ -87,6 +89,7 @@ const prediction = async () => {
         <text>生成</text>
       </button>
 			<div class="uni-form-item uni-column">
+        <input type="text" :src="outputtext"  >
         <img class="res_img" :src="imageUrl" mode=""></img> 
 			</div>
 		</div>
