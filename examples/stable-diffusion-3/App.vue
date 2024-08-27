@@ -40,20 +40,20 @@ const prediction = async () => {
         appId: '55VCW0J_mK6PqgPlml.9C5ZdA39tYqTiIUdMxvTLWE4A' //replace app id
     })
   
-    let price = 8
+    let price = 10
     const ai = new AI(ai_options)
-    let response = await ai.prediction("/predictions/ai/minigpt-4",
+    let response = await ai.prediction("/predictions/ai/stable-diffusion-3",
     {
-      input:{
-        "image": "https://replicate.delivery/pbxt/IqG1MbemhULihtfr62URRZbI29XtcPsnOYASrTDQ6u5oSqv9/llama_13b.png",
-        "top_p": 0.9,
-        "prompt": "This llama's name is Dave. Write me a story about how Dave found his skateboard.",
-        "num_beams": 5,
-        "max_length": 4000,
-        "temperature": 1.32,
-        "max_new_tokens": 3000,
-        "repetition_penalty": 1
-      }
+        input:{
+            "prompt": "with smoke, half ice and half fire and ultra realistic in detail.wolf, typography, dark fantasy, wildlife photography, vibrant, cinematic and on a black background",
+            "cfg": 3.5,
+            "steps": 28,
+            "aspect_ratio": "9:16",
+            "output_format": "png",
+            "output_quality": 90,
+            "negative_prompt": "",
+            "prompt_strength": 0.85
+        }
     },price);
     showLoading.value = false
     if (response && response.code == 200 && response.data) {
