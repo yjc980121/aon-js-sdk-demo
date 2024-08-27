@@ -4,9 +4,12 @@ import { AI, AIOptions, User } from 'aonweb'
 import { ref } from 'vue'
 
 
-const imageUrl = ref('')
 const showLoading = ref(false);
-const outputtext=ref('')
+const output=ref('')
+const is_text = ref(false)
+const is_audio = ref(false)
+const is_video = ref(false)
+const is_image = ref(false)
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -62,6 +65,7 @@ const prediction = async () => {
     if (response.task.exec_code == 200 && response.task.is_success) {
         console.log("test",response.output);
         let url = response.output
+        output.value = url
         if (Array.isArray(response.output)) {
           url = response.output && response.output.length && response.output[0]
         }
@@ -69,8 +73,7 @@ const prediction = async () => {
         if (typeof url == 'object' || typeof url == 'Object') {
           return
         }
-        imageUrl.value = url
-        outputtext.value= url
+      is_text.value = true
     }
   } catch (error) {
     console.log("prediction error = ",error)
@@ -88,10 +91,24 @@ const prediction = async () => {
       <button class="" @click="prediction">
         <text>生成</text>
       </button>
-			<div class="uni-form-item uni-column">
-        <input type="text" :src="outputtext"  >
-        <img class="res_img" :src="imageUrl" mode=""></img> 
-			</div>
+      <div class="uni-form-item uni-column">
+        <div v-if="is_image">
+        <!-- 展示图像 -->
+        <img class="res_img" :src="output" mode="" />
+        </div>
+        <div v-else-if="is_audio">
+          <!-- 展示音频 -->
+          <audio :src="output.audioUrl" controls></audio>
+        </div>
+        <div v-else-if="is_video">
+          <!-- 展示视频 -->
+          <audio :src="output" controls></audio>
+        </div>
+        <div v-else-if="is_text">
+          <!-- 展示文本 -->
+          <textarea readonly>{{ output }}</textarea>
+        </div>
+      </div>
 		</div>
 	</div>
 </template>
